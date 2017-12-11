@@ -23,6 +23,7 @@ test('basics: edit', async t => {
   let db = getDatabase()
   let doc = await db.create('test1', doc => { doc.ok = true })
   doc = await db.edit('test1', doc => { doc.ok = 'pass' })
+  // console.log(doc)
   t.same(doc.ok, 'pass')
   let doc2 = await db.get('test1')
   t.same(doc, doc2)
@@ -37,7 +38,7 @@ test('basics: merge', async t => {
   t.ok(!doc2.ok)
   t.same(doc2.second, true)
   t.ok(!doc.second)
-  let merged = await db.merge('test1', doc2)
+  let merged = await db.merge('test1', await db.getDocument('test2'))
   t.same(merged.ok, true)
   t.same(merged.second, true)
   t.same(merged, await db.get('test1'))
@@ -46,8 +47,8 @@ test('basics: merge', async t => {
 test('basics: from', async t => {
   t.plan(1)
   let db = getDatabase()
-  let doc = await db.create('test1', doc => { doc.ok = true })
-  await db.from('test2', doc)
+  await db.create('test1', doc => { doc.ok = true })
+  await db.from('test2', await db.getDocument('test1'))
   let history1 = await db.history('test1')
   let history2 = await db.history('test2')
   let _map = hist => hist.change
@@ -64,4 +65,21 @@ test('basics: edit w/ custom message', async t => {
   t.same(doc, doc2)
   let history = await db.history('test1')
   t.same(history[1].change.message, 'test-message')
+})
+
+test('basics: empty edit and merge', async t => {
+  t.plan(4)
+  let db = getDatabase()
+  let doc = await db.create('test1', doc => { doc.ok = true })
+  let getrev = async () => {
+    let doc = await db.db.get('test1')
+    return doc._rev
+  }
+  let rev = getrev()
+  await db.edit('test1', () => {})
+  t.ok(doc.ok)
+  t.same(getrev(), rev)
+  let _merge = await db.merge('test1', await db.getDocument('test1'))
+  t.ok(_merge.ok)
+  t.same(getrev(), rev)
 })
