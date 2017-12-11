@@ -1,6 +1,6 @@
 {
   "name": "rattan",
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "description": "Automerging JSON database for p2p and offline applications.",
   "main": "index.js",
   "scripts": {
@@ -29,5 +29,9 @@
     "standard": "^10.0.3",
     "tap": "^11.0.0",
     "validate-commit-msg": "^2.14.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mikeal/rattan.git"
   }
 }
