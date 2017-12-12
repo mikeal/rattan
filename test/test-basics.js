@@ -1,12 +1,15 @@
-let rattan = require('../')
-let {test} = require('tap')
-
-require('pouchdb').plugin(require('pouchdb-adapter-memory'))
+const rattan = require('../')
+const {test} = require('tap')
+const path = require('path')
+const mkdirp = require('mkdirp')
+const tmpdir = require('os').tmpdir()
 
 const random = () => Math.random(12).toString()
 
 const getDatabase = () => {
-  return rattan({name: random(), adapter: 'memory'})
+  const dir = path.join(tmpdir, random())
+  mkdirp.sync(dir)
+  return rattan({name: random(), prefix: dir})
 }
 
 test('basics: create', async t => {
@@ -23,7 +26,6 @@ test('basics: edit', async t => {
   let db = getDatabase()
   let doc = await db.create('test1', doc => { doc.ok = true })
   doc = await db.edit('test1', doc => { doc.ok = 'pass' })
-  // console.log(doc)
   t.same(doc.ok, 'pass')
   let doc2 = await db.get('test1')
   t.same(doc, doc2)

@@ -64,13 +64,19 @@ class Database {
     await this.db.put(doc)
     return doc.snapshot
   }
-  // changes (fn) {
-  //   this._changes.add(fn)
-  // }
   async history (id) {
     let obj = await this._get(id)
     return getHistory(obj)
   }
+  async push (remote) {
+    return this.db.replicate.to(remote)
+    // TODO: query and resolve any conflicted documents.
+  }
+  async pull (remote) {
+    return this.db.replicate.from(remote)
+    // TODO: query and resolve any conflicted documents.
+  }
+  // TODO: sync() API
 }
 
 module.exports = (...args) => new Database(...args)
