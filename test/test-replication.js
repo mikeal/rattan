@@ -64,3 +64,28 @@ test('replication: pull', async t => {
   let doc = await db2.get('test1')
   t.same(doc.ok, true)
 })
+
+// test('replication: resolve conflicts', async t => {
+//   t.plan(2)
+//   let db1 = getDatabase('db1')
+//   let db2 = getDatabase('db2')
+//   await db1.create('test', doc => { doc.test = [] })
+//   await db2.create('test', doc => {
+//     doc.test = []
+//     doc.ok = true
+//   })
+//   await db1.edit('test', doc => doc.test.push('one'))
+//   await db2.edit('test', doc => doc.test.push('two'))
+//   await db2.edit('test', doc => doc.test.push('three'))
+
+//   let ret = await db1.push('http://localhost:3000/db/resolve-conflicts')
+//   await db2.db.replicate.from('http://localhost:3000/db/resolve-conflicts')
+//   let conflicts = await db2.conflicts()
+//   t.same(1, conflicts.length)
+//   console.log(conflicts)
+//   await db2.pull('http://localhost:3000/db/resolve-conflicts')
+//   conflicts = await db2.conflicts()
+//   console.log(conflicts)
+//   console.log(await db2.getDocument('test'))
+//   t.same(0, conflicts.length)
+// })

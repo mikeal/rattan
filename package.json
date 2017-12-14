@@ -16,8 +16,9 @@
   "author": "Mikeal Rogers <mikeal.rogers@gmail.com> (http://www.mikealrogers.com)",
   "license": "Apache-2.0",
   "dependencies": {
-    "automerge": "^0.5.0",
-    "pouchdb": "^6.3.4"
+    "automerge": "^0.6.0",
+    "pouchdb": "^6.3.4",
+    "pouchdb-find": "^6.3.4"
   },
   "devDependencies": {
     "bent": "^1.1.0",
